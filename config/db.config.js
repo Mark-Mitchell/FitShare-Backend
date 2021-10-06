@@ -1,9 +1,9 @@
-const { password } = require("./password");
+// const { password } = require("./password");
 
 module.exports = {
   HOST: "localhost",
   USER: "root",
-  PASSWORD: password,
+  PASSWORD: "password",
   DB: "testdb",
   dialect: "mysql",
   pool: {
