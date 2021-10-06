@@ -1,0 +1,28 @@
+{
+  "name": "fitshare-backend",
+  "version": "0.0.1",
+  "description": "Backend for FitShare app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mark-Mitchell/FitShare-Backend.git"
+  },
+  "author": "Mark Mitchell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mark-Mitchell/FitShare-Backend/issues"
+  },
+  "homepage": "https://github.com/Mark-Mitchell/FitShare-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.0",
+    "sequelize": "^6.6.5"
+  }
+}
