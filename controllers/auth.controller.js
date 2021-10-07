@@ -49,16 +49,15 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  console.log(req.body);
   User.findOne({
     where: {
-      username: req.body.username,
+      email: req.body.email,
     },
   }).then((user) => {
     if (!user) {
       return res.status(404).send({
         message:
-          "There is no user with your username. Please try another username.",
+          "There is no account using your email. Please check your input or create an account.",
       });
     }
 
