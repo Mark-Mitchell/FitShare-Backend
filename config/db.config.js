@@ -1,7 +1,7 @@
 let config;
 
 if (!process.env.HOST) {
-  config = require("./config");
+  config = require("./env.variables");
 }
 
 module.exports = {

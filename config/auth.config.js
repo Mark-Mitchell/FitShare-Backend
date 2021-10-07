@@ -1,7 +1,7 @@
 let config;
 
 if (!process.env.SECRET) {
-  config = require("./config");
+  config = require("./env.variables");
 }
 
 const secret = process.env.SECRET || config.secret;
