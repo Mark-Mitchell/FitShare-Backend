@@ -1,10 +1,17 @@
 // const { password } = require("./password");
+let config;
+
+if (!process.env.HOST) {
+  config = require("./config");
+}
+
+console.log(config.password);
 
 module.exports = {
-  HOST: process.env.HOST,
-  USER: process.env.USER,
-  PASSWORD: process.env.PASSWORD,
-  DB: process.env.DB,
+  HOST: process.env.HOST || config.host,
+  USER: process.env.USER || config.user,
+  PASSWORD: process.env.PASSWORD || config.password,
+  DB: process.env.DB || config.db,
   dialect: "mysql",
   pool: {
     max: 5,
