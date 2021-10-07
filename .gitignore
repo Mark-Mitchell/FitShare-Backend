@@ -103,5 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Ignore the PW file
-password.js
+# Ignore the config file with passwords for local development
+# config.js

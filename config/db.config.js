@@ -1,11 +1,8 @@
-// const { password } = require("./password");
 let config;
 
 if (!process.env.HOST) {
   config = require("./config");
 }
-
-// console.log(config.password);
 
 module.exports = {
   HOST: process.env.HOST || config.host,

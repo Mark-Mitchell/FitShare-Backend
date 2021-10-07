@@ -1,11 +1,7 @@
-// export password = "kLBmL$brXy58S@bT";
-// export secret = "super-ultimate-secret-string";
-
 module.exports = {
-  password: "kLBmL$brXy58S@bT",
-  secret: "super-ultimate-secret-string",
-  db: "testdb",
-  password: "BmL$brXy58S@bT",
-  user: "root",
-  host: "localhost",
+  password: "DATABASE_PW",
+  secret: "SECRET_STRING",
+  db: "DATABASE_NAME",
+  user: "USERNAME",
+  host: "DB_HOST",
 };

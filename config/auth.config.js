@@ -1,6 +1,10 @@
-// const { secret } = require("./password");
+let config;
 
-const secret = process.env.SECRET || "ENTER LOCAL STRINg";
+if (!process.env.SECRET) {
+  config = require("./config");
+}
+
+const secret = process.env.SECRET || config.secret;
 module.exports = {
   secret,
 };
