@@ -7,6 +7,7 @@ const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
+  console.log("Received token: ", token);
 
   if (!token) {
     console.log("NO TOKEN");
