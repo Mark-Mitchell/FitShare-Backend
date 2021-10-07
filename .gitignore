@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Ignore the config file with passwords for local development
-# config.js
+config.js
