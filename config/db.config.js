@@ -3,7 +3,7 @@
 module.exports = {
   HOST: "localhost",
   USER: "root",
-  PASSWORD: "password",
+  PASSWORD: process.env.DB_PW || "LOCAL PW",
   DB: "testdb",
   dialect: "mysql",
   pool: {
