@@ -1,7 +1,7 @@
 module.exports = {
-  password: "DATABASE_PW",
-  secret: "SECRET_STRING",
-  db: "DATABASE_NAME",
-  user: "USERNAME",
-  host: "DB_HOST",
+  password: "kLBmL$brXy58S@bT",
+  secret: "super-ultimate-secret-string",
+  db: "testdb",
+  user: "root",
+  host: "localhost",
 };
