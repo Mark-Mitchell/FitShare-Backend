@@ -7,10 +7,8 @@ const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-  console.log("Received token: ", token);
 
   if (!token) {
-    console.log("NO TOKEN");
     return res.status(403).send({
       message: "No token provided",
     });
@@ -18,10 +16,18 @@ verifyToken = (req, res, next) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      console.log(err);
-      return res.status(401).send({
-        message: "Unauthorized!",
-      });
+      // check if token is expired first
+      if (JSON.stringify(err).includes("TokenExpiredError")) {
+        res.status(403).send({
+          message:
+            "ERROR: Your session has expired, please log in again. (TokenExpiredError)",
+        });
+        return;
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized!",
+        });
+      }
     }
     req.userId = decoded.id;
     console.log("SUCCESSFULLY LOGGED IN");
@@ -31,7 +37,6 @@ verifyToken = (req, res, next) => {
 
 isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
-    console.log(user);
     user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "admin") {
