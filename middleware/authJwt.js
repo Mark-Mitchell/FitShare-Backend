@@ -31,16 +31,23 @@ verifyToken = (req, res, next) => {
     }
 
     req.userId = decoded.id;
-    // console.log("SUCCESSFULLY LOGGED IN");
-    let userInfo;
+    // send back user info except the password
     User.findByPk(req.userId).then((user) => {
-      userInfo = user;
+      if (user) {
+        const { id, email, username, createdAt, updatedAt } = user.dataValues;
+        const userOutput = {
+          id,
+          email,
+          username,
+          createdAt,
+          updatedAt,
+        };
+        res.status(200).send({
+          message: "SUCCESS: Successfully logged in.",
+          user: userOutput,
+        });
+      }
     });
-    res.status(200).send({
-      message: "SUCCESS: Successfully logged in.",
-      user: userInfo,
-    });
-    // next();
   });
 };
 
