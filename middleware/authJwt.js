@@ -10,7 +10,7 @@ verifyToken = (req, res, next) => {
 
   if (!token) {
     return res.status(403).send({
-      message: "No token provided",
+      message: "ERROR: No token provided. (NoTokenError)",
     });
   }
 
@@ -25,13 +25,22 @@ verifyToken = (req, res, next) => {
         return;
       } else {
         return res.status(401).send({
-          message: "Unauthorized!",
+          message: "ERROR: Unauthorized!",
         });
       }
     }
+
     req.userId = decoded.id;
-    console.log("SUCCESSFULLY LOGGED IN");
-    next();
+    // console.log("SUCCESSFULLY LOGGED IN");
+    let userInfo;
+    User.findByPk(req.userId).then((user) => {
+      userInfo = user;
+    });
+    res.status(200).send({
+      message: "SUCCESS: Successfully logged in.",
+      user: userInfo,
+    });
+    // next();
   });
 };
 
