@@ -24,6 +24,10 @@ db.sequelize = sequelize;
 
 db.user = require("../models/user.model")(sequelize, Sequelize);
 db.role = require("../models/role.model")(sequelize, Sequelize);
+db.unlistedWorkout = require("../models/unlistedWorkout.model")(
+  sequelize,
+  Sequelize
+);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -36,6 +40,15 @@ db.user.belongsToMany(db.role, {
   foreignKey: "userId",
   otherKey: "roleId",
 });
+
+// db.unlistedWorkout.belongsTo(db.user, {
+//   foreignKey: "unlistedWorkoutId",
+//   as: "user",
+// });
+
+// db.user.hasMany(db.unlistedWorkout, {
+//   as: "workouts",
+// });
 
 db.ROLES = ["user", "admin", "moderator"];
 

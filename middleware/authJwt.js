@@ -15,7 +15,9 @@ verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
+    console.log("VERIFY TOKEn");
     if (err) {
+      console.log("TOKEN ERR");
       // check if token is expired first
       if (JSON.stringify(err).includes("TokenExpiredError")) {
         res.status(403).send({
@@ -31,23 +33,52 @@ verifyToken = (req, res, next) => {
     }
 
     req.userId = decoded.id;
+    console.log("TOKEN NEXT");
+    next();
     // send back user info except the password
-    User.findByPk(req.userId).then((user) => {
-      if (user) {
-        const { id, email, username, createdAt, updatedAt } = user.dataValues;
-        const userOutput = {
-          id,
-          email,
-          username,
-          createdAt,
-          updatedAt,
-        };
-        res.status(200).send({
-          message: "SUCCESS: Successfully logged in.",
-          user: userOutput,
-        });
-      }
-    });
+    // User.findByPk(req.userId).then((user) => {
+    //   if (user) {
+    //     const { id, email, username, createdAt, updatedAt } = user.dataValues;
+    //     const userOutput = {
+    //       id,
+    //       email,
+    //       username,
+    //       createdAt,
+    //       updatedAt,
+    //     };
+    //     res.status(200).send({
+    //       message: "SUCCESS: Successfully logged in.",
+    //       user: userOutput,
+    //     });
+    //     // next();
+    //   }
+    // });
+  });
+  // next();
+};
+
+returnUserInfo = (req, res, next) => {
+  // console.log("")
+  User.findByPk(req.userId).then((user) => {
+    if (user) {
+      const { id, email, username, createdAt, updatedAt } = user.dataValues;
+      const userOutput = {
+        id,
+        email,
+        username,
+        createdAt,
+        updatedAt,
+      };
+      return res.status(200).send({
+        message: "SUCCESS: Successfully logged in.",
+        user: userOutput,
+      });
+      // next();
+    } else {
+      return res.status(401).send({
+        message: "ERROR - Please try to login again. (UserDoesNotExist)",
+      });
+    }
   });
 };
 
@@ -107,6 +138,7 @@ const authJwt = {
   isAdmin,
   isModerator,
   isModeratorOrAdmin,
+  returnUserInfo,
 };
 
 module.exports = authJwt;
