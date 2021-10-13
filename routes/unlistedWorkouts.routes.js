@@ -10,30 +10,25 @@ module.exports = function (app) {
     next();
   });
 
-  //   app.get("/api/test/all", controller.allAccess);
-
   app.post(
     "/api/unlistedWorkout/upload",
     [
       authJwt.verifyToken,
       verifyNewUnlistedWorkout.checkAllDataProvided,
       verifyNewUnlistedWorkout.addUnlistedWorkout,
-      // controller.addUnlistedWorkout
     ],
+    controller.unlistedWorkoutBoardSuccess
+  );
+
+  app.post(
+    "/api/unlistedWorkout/download",
+    [authJwt.verifyToken, verifyNewUnlistedWorkout.checkId],
     controller.unlistedWorkoutBoard
   );
 
-  // app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
-
-  //   app.get(
-  //     "/api/test/mod",
-  //     [authJwt.verifyToken, authJwt.isModerator],
-  //     controller.moderatorBoard
-  //   );
-
-  //   app.get(
-  //     "/api/test/admin",
-  //     [authJwt.verifyToken, authJwt.isAdmin],
-  //     controller.adminBoard
-  //   );
+  app.post(
+    "/api/unlistedWorkout/delete",
+    [authJwt.verifyToken, verifyNewUnlistedWorkout.checkDeleteData],
+    controller.deleteWorkout
+  );
 };

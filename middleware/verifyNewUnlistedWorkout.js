@@ -7,20 +7,21 @@ const UnlistedWorkout = db.unlistedWorkout;
 checkAllDataProvided = (req, res, next) => {
   // check if user provided email, username and pw
   if (!req.body.workout)
-    return res.status(400).send({ message: "Please provide a workout." });
+    return res
+      .status(400)
+      .send({ message: "Please provide a workout. (NoWorkout)" });
   if (!req.body.userId)
-    return res.status(400).send({ message: "Please provide the userId." });
+    return res
+      .status(400)
+      .send({ message: "Please provide the userId. (NoUserId)" });
   if (req.body.userId !== req.userId)
     return res
       .status(400)
       .send({ message: "Please log in again and then retry. (WrongUserId)" });
-  // console.log("Data provided check: " + req.userId);
   next();
 };
 
 addUnlistedWorkout = async (req, res, next) => {
-  console.log("adding a workout");
-
   const generateSlug = async () => {
     const possibleCharacters =
       "abcdefghijklmnopqrstuvwxyz123456789012345678901234567890";
@@ -42,42 +43,14 @@ addUnlistedWorkout = async (req, res, next) => {
 
   const slug = await generateSlug();
   req.slug = slug;
-  console.log("LOCAL: " + req.slug);
 
   UnlistedWorkout.create({
     workout: req.body.workout,
-    // id: req.body.id,
     userId: req.body.userId,
     slug: slug,
   })
     .then((workout) => {
-      console.log(workout);
-      console.log("FINISHED");
       next();
-      //   if (req.body.roles) {
-      //     Role.findAll({
-      //       where: {
-      //         name: {
-      //           [Op.or]: req.body.roles,
-      //         },
-      //       },
-      //     }).then((roles) => {
-      //       user.setRoles(roles).then(() => {
-      //         res.send({
-      //           message:
-      //             "You have successfully registered your account. Please log into it using your credentials!",
-      //         });
-      //       });
-      //     });
-      //   } else {
-      //     // user role = 1
-      //     user.setRoles([1]).then(() => {
-      //       res.send({
-      //         message:
-      //           "You have successfully registered your account. Please log into it using your credentials!",
-      //       });
-      //     });
-      //   }
     })
     .catch((err) => {
       res.status(500).send({
@@ -87,9 +60,45 @@ addUnlistedWorkout = async (req, res, next) => {
   //   };
 };
 
+checkId = (req, res, next) => {
+  if (!req.body.slug)
+    return res
+      .status(400)
+      .send({ message: "ERROR - Please provide a valid ID. (InvalidID)" });
+  next();
+};
+
+checkDeleteData = (req, res, next) => {
+  if (!req.body.slug) {
+    return res
+      .status(400)
+      .send({ message: "ERROR - Please provide a slug. (NoSlug)" });
+  }
+  if (!req.body.userId) {
+    return res
+      .status(400)
+      .send({ message: "ERROR - Please provide a userId. (NoUserId" });
+  }
+
+  UnlistedWorkout.findOne({ where: { slug: req.body.slug } }).then(
+    (workout) => {
+      if (!workout) {
+        return res.status(404).send({
+          message: "ERROR - No workout was found under this slug. (WrongSlug)",
+        });
+      } else {
+        req.workout = workout;
+        next();
+      }
+    }
+  );
+};
+
 const verifyNewUnlistedWorkout = {
   checkAllDataProvided,
   addUnlistedWorkout,
+  checkId,
+  checkDeleteData,
 };
 
 module.exports = verifyNewUnlistedWorkout;

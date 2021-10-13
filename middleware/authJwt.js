@@ -7,17 +7,14 @@ const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-
-  if (!token) {
+  if (!token || token === "null") {
     return res.status(403).send({
       message: "ERROR: No token provided. (NoTokenError)",
     });
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
-    console.log("VERIFY TOKEn");
     if (err) {
-      console.log("TOKEN ERR");
       // check if token is expired first
       if (JSON.stringify(err).includes("TokenExpiredError")) {
         res.status(403).send({
@@ -25,6 +22,10 @@ verifyToken = (req, res, next) => {
             "ERROR: Your session has expired, please log in again. (TokenExpiredError)",
         });
         return;
+      } else if (JSON.stringify(err).includes("invalid signature")) {
+        return res.status(401).send({
+          message: "ERROR: Unauthorized! (Invalid signature)",
+        });
       } else {
         return res.status(401).send({
           message: "ERROR: Unauthorized!",
@@ -33,7 +34,6 @@ verifyToken = (req, res, next) => {
     }
 
     req.userId = decoded.id;
-    console.log("TOKEN NEXT");
     next();
     // send back user info except the password
     // User.findByPk(req.userId).then((user) => {
@@ -58,7 +58,6 @@ verifyToken = (req, res, next) => {
 };
 
 returnUserInfo = (req, res, next) => {
-  // console.log("")
   User.findByPk(req.userId).then((user) => {
     if (user) {
       const { id, email, username, createdAt, updatedAt } = user.dataValues;
