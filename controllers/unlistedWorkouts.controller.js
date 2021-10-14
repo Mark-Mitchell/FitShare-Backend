@@ -13,8 +13,9 @@ exports.unlistedWorkoutBoardSuccess = async (req, res) => {
 };
 
 exports.unlistedWorkoutBoard = async (req, res) => {
+  const slug = req.body.slug.toLowerCase();
   const workout = await UnlistedWorkout.findOne({
-    where: { slug: req.body.slug },
+    where: { slug: slug },
   });
   const user = await User.findByPk(workout.userId);
   if (workout) {
