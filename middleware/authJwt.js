@@ -35,26 +35,7 @@ verifyToken = (req, res, next) => {
 
     req.userId = decoded.id;
     next();
-    // send back user info except the password
-    // User.findByPk(req.userId).then((user) => {
-    //   if (user) {
-    //     const { id, email, username, createdAt, updatedAt } = user.dataValues;
-    //     const userOutput = {
-    //       id,
-    //       email,
-    //       username,
-    //       createdAt,
-    //       updatedAt,
-    //     };
-    //     res.status(200).send({
-    //       message: "SUCCESS: Successfully logged in.",
-    //       user: userOutput,
-    //     });
-    //     // next();
-    //   }
-    // });
   });
-  // next();
 };
 
 returnUserInfo = (req, res, next) => {
@@ -81,62 +62,8 @@ returnUserInfo = (req, res, next) => {
   });
 };
 
-isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then((user) => {
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
-      }
-
-      return res.status(403).send({
-        message: "Require Admin role",
-      });
-    });
-  });
-};
-
-isModerator = (req, res, next) => {
-  User.findByPk(req.userId).then((user) => {
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator") {
-          next();
-          return;
-        }
-      }
-
-      return res.status(403).send({
-        message: "Require Mod role!",
-      });
-    });
-  });
-};
-
-isModeratorOrAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then((user) => {
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator" || roles[i].name === "admin") {
-          next();
-          return;
-        }
-      }
-
-      return res.status(403).send({
-        message: "Require mod or admin",
-      });
-    });
-  });
-};
-
 const authJwt = {
   verifyToken,
-  isAdmin,
-  isModerator,
-  isModeratorOrAdmin,
   returnUserInfo,
 };
 

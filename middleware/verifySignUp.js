@@ -1,5 +1,5 @@
 const db = require("../models");
-const ROLES = db.ROLES;
+// const ROLES = db.ROLES;
 const User = db.user;
 
 checkAllDataProvided = (req, res, next) => {
@@ -47,25 +47,10 @@ checkDuplicateEmail = (req, res, next) => {
   });
 };
 
-checkRolesExisted = (req, res, next) => {
-  if (req.body.roles) {
-    for (let i = 0; i < req.body.roles.length; i++) {
-      if (!ROLES.includes(req.body.roles[i])) {
-        return res.status(400).send({
-          message: "ERROR: Role doesn't exist: " + req.body.roles[i],
-        });
-      }
-    }
-  }
-
-  next();
-};
-
 const verifySignUp = {
   checkAllDataProvided,
   checkDuplicateUsername,
   checkDuplicateEmail,
-  checkRolesExisted,
 };
 
 module.exports = verifySignUp;
