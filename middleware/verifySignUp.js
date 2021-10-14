@@ -1,4 +1,5 @@
 const db = require("../models");
+const commonPassword = require("common-password");
 // const ROLES = db.ROLES;
 const User = db.user;
 
@@ -10,6 +11,16 @@ checkAllDataProvided = (req, res, next) => {
     return res.status(400).send({ message: "Please provide an email." });
   if (!req.body.password)
     return res.status(400).send({ message: "Please provide a password." });
+  if (req.body.password.length < 8)
+    return res.status(400).send({
+      message:
+        "Your password is too short. Please use a password that is at least 8 characters long.",
+    });
+  if (commonPassword(req.body.password))
+    return res.status(400).send({
+      message:
+        "Your password is too easy to guess. Please try another password.",
+    });
   next();
 };
 
