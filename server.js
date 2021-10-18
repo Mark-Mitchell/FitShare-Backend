@@ -5,12 +5,14 @@ const app = express();
 
 const db = require("./models/");
 
-// FOR DEVELOPMENT ONLY
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and Resync Db");
-});
+// // FOR DEVELOPMENT ONLY
+// if (!process.env.PORT) {
+//   db.sequelize.sync({ force: true }).then(() => {
+//     console.log("Drop and Resync Db");
+//   });
+// }
 // // For Production:
-// // db.sequelize.sync();
+db.sequelize.sync();
 
 app.use(
   cors({
